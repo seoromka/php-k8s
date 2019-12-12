@@ -26,4 +26,4 @@ COPY build/php/etc/main/php.ini /usr/local/etc/php/
 COPY build/php/etc/main/www.conf /usr/local/etc/php-fpm.d/
 COPY build/php/etc/common_configs/logs/logs.conf /usr/local/etc/php-fpm.d/
 
-COPY ./src/ /var/www/html/
+COPY ./www/ /var/www/

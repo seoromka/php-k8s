@@ -4,7 +4,7 @@ LABEL maintainer "i.yatsevich@2gis.ru"
 LABEL version = "1.0"
 LABEL description = "PHP-FPM-7.1 base image"
 
-WORKDIR /var/www/html/
+WORKDIR /var/www/
 
 # Install php-extentions and apk packages
 RUN set -xe \
@@ -46,8 +46,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin -
 ### Для ускорения работы composer
 RUN composer global require hirak/prestissimo
 
-COPY ./src/composer.json composer.json
-#COPY ./src/composer.lock composer.lock
+COPY ./www/composer.json composer.json
+#COPY ./www/composer.lock composer.lock
 # Install dependencies from composer
 # Bug: if `composer.json` not found - docker build will be failed
 RUN composer install --optimize-autoloader --no-interaction -vvv

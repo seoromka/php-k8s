@@ -1,5 +1,5 @@
 REGISTRY_PATH       = registry.hub.docker.com
-REGISTRY_NAMESPACE  = igonsk
+REGISTRY_NAMESPACE  = rkostin
 APP_IMAGE_NAME      = app-api
 WEB_IMAGE_NAME      = app-web
 DNS_IMAGE_NAME      = dns-cache

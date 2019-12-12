@@ -20,7 +20,7 @@ services:
     env_file:
       - .env-base
     volumes:
-      - ./public:/var/www/html
+      - ./www/public:/var/www/
 
   app:
     build:
@@ -35,8 +35,7 @@ services:
       - .env
     volumes:
       - ./build/utils/dockerize-linux-amd64-v0.6.0:/usr/local/bin/dockerize
-      - ./src/:/var/www/html
-      - ./src/vendor:/var/www/html/vendor
+      - ./www:/var/www/
       - xhprof-data:/tmp
 
   xhprof:

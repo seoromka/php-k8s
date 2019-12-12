@@ -16,7 +16,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 COPY build/nginx/etc/main/nginx.conf /etc/nginx/nginx.conf
 COPY build/nginx/etc/conf.d/default.conf.template /etc/nginx/conf.d/default.conf.template
 
-COPY public/ /var/www/html/
+COPY www/public/ /var/www/
 
 CMD [ "dockerize",\
         "-template", "/etc/nginx/conf.d/default.conf.template:/etc/nginx/conf.d/default.conf",\
