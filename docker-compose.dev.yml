@@ -5,7 +5,10 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./build/php/Dockerfile.o
+      dockerfile: ./build/php/Dockerfile-dev
+      args:
+        - BASE_IMAGE_PATH=${APP_BASE_IMAGE_PATH}
+        - BASE_IMAGE_VERSION=${APP_BASE_IMAGE_VERSION}
     image: digitalocean.com/php
     container_name: app
     restart: unless-stopped

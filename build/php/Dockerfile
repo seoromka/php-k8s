@@ -3,8 +3,12 @@ ARG BASE_IMAGE_VERSION=${BASE_IMAGE_VERSION}
 FROM ${BASE_IMAGE_PATH}:${BASE_IMAGE_VERSION}
 
 # Add php configs
-COPY build/php/etc/main/php.ini /usr/local/etc/php/
-COPY build/php/etc/main/www.conf /usr/local/etc/php-fpm.d/
-COPY build/php/etc/common_configs/logs/logs.conf /usr/local/etc/php-fpm.d/
+COPY ./build/php/etc/main/php.ini /usr/local/etc/php/
+COPY ./build/php/etc/main/www.conf /usr/local/etc/php-fpm.d/
+COPY ./build/php/etc/common_configs/logs/logs.conf /usr/local/etc/php-fpm.d/
 
-COPY ./www/ /var/www/
+# Copy existing application directory contents
+COPY ./www /var/www
+
+# Copy existing application directory permissions
+COPY --chown=www:www ./www /var/www

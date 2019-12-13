@@ -1,7 +1,7 @@
 REGISTRY_PATH       = registry.hub.docker.com
 REGISTRY_NAMESPACE  = rkostin
-APP_IMAGE_NAME      = app-api
-WEB_IMAGE_NAME      = app-web
+APP_IMAGE_NAME      = test-app
+WEB_IMAGE_NAME      = test-app-web
 DNS_IMAGE_NAME      = dns-cache
 REF_NAME           ?= $(shell git rev-parse --abbrev-ref HEAD)
 IMAGE_VERSION      ?= ${REF_NAME}-$(shell git rev-parse HEAD)
