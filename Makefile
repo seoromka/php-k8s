@@ -23,7 +23,7 @@ dev-init:
 .PHONY: dev-migrate
 dev-migrate: export COMPOSE_FILE = docker-compose.dev.yml
 dev-migrate:
-	docker-compose exec app dockerize -wait tcp://db:5432 -timeout 30s ./yii migrate/up --interactive=0 | tail -n 10
+	docker-compose exec app dockerize -wait tcp://db:3306 -timeout 30s ./php artisan:migrate | tail -n 10
 
 .PHONY: dev-app-bash
 dev-app-bash: export COMPOSE_FILE = docker-compose.dev.yml
@@ -34,6 +34,7 @@ dev-app-bash:
 dev-up: export COMPOSE_FILE = docker-compose.dev.yml
 dev-up: dev-down dev-init
 	docker-compose up --build --force-recreate -d
+	docker-compose up -d
 	docker-compose logs -f
 
 .PHONY: dev-down

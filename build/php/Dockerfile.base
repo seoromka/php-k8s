@@ -15,7 +15,7 @@ RUN set -xe \
     --no-install-recommends \
     && docker-php-ext-install \
         intl \
-        pdo_pgsql \
+        pdo_mysql \
         pcntl \
         mbstring \
         dom \

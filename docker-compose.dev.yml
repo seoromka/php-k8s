@@ -49,13 +49,16 @@ services:
     extends:
       file: docker-compose.yml
       service: db
-    command: >
-      postgres
-        -c log_statement=all
-        -c listen_addresses=*
-        -c hba_file=/pg_hba.conf
     ports:
-      - '15432:5432'
+      - '13306:3306'
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    #network_mode: 'service:pod'
+    environment:
+      - PMA_ARBITRARY=1
+    ports:
+      - '18080:80'
 
   cache:
     extends:

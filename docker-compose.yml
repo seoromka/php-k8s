@@ -33,15 +33,13 @@ services:
       - .env-base
 
   db:
-    image: postgres:9.6.8-alpine
+    image: mysql:5.7
     environment:
-      - TZ=Asia/Novosibirsk
-    command: >
-      postgres
-        -c listen_addresses=*
-        -c hba_file=/pg_hba.conf
+      - MYSQL_ROOT_PASSWORD=pass
     volumes:
-      - ./build/postgresql/pg_hba.conf:/pg_hba.conf
+      - ./build/mysql/data:/var/lib/mysql
+    ports:
+      - '3306'
 
   cache:
     image: redis:3.2.10-alpine
