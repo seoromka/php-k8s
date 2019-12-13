@@ -11,7 +11,7 @@ RUN set -xe \
     && docker-php-ext-install /tmp/xhprof/extension \
     && rm -r /tmp/xhprof \
     && pecl install -o -f \
-        xdebug-2.5.5 \
+        xdebug-2.6.0 \
     && docker-php-ext-enable \
         xdebug \
         xhprof \
