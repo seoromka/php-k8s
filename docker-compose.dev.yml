@@ -1,68 +1,89 @@
-version: '2'
-
-volumes:
-  xhprof-data:
-    driver: local
+version: '3'
 
 services:
-  pod:
-    image: gcr.io/google_containers/pause-amd64:3.0
-    ports:
-      - '80:80'
-    dns:
-      - 8.8.8.8
-
-  web:
-    build:
-      context: .
-      dockerfile: build/nginx/Dockerfile
-    network_mode: 'service:pod'
-    env_file:
-      - .env-base
-    volumes:
-      - ./www/public:/var/www/
-
+  #PHP Service
   app:
     build:
       context: .
-      dockerfile: build/php/Dockerfile-dev
-      args:
-        - BASE_IMAGE_PATH=${APP_BASE_IMAGE_PATH}
-        - BASE_IMAGE_VERSION=${APP_BASE_IMAGE_VERSION}
-    network_mode: 'service:pod'
-    env_file:
-      - .env-base
-      - .env
+      dockerfile: ./build/php/Dockerfile.o
+    image: digitalocean.com/php
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
     volumes:
-      - ./build/utils/dockerize-linux-amd64-v0.6.0:/usr/local/bin/dockerize
-      - ./www:/var/www/
-      - xhprof-data:/tmp
-
-  xhprof:
-    image: wpalmer/xhprof
-    volumes:
-      - xhprof-data:/tmp
+      - ./www/:/var/www
+    networks:
+      - app-network
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
     ports:
-      - '8081:8081'
-
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./www/:/var/www
+      - ./build/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+  #MySQL Service
   db:
-    extends:
-      file: docker-compose.yml
-      service: db
+    image: mysql:5.7.22
+    container_name: db
+    restart: unless-stopped
+    tty: true
     ports:
-      - '13306:3306'
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: your_mysql_root_password
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./build/mysql/data:/var/lib/mysql/
+      - ./build/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+  # Redis Service
+  redis:
+    image: redis:latest
+    container_name: redis
+    networks:
+      - app-network
 
+  #DEV
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    #network_mode: 'service:pod'
+    container_name: phpmyadmin
     environment:
       - PMA_ARBITRARY=1
     ports:
-      - '18080:80'
+      - '888:80'
+    networks:
+      - app-network
 
-  cache:
-    extends:
-      file: docker-compose.yml
-      service: cache
+  phpredisadmin:
+    image: erikdubbelboer/phpredisadmin
+    container_name: phpredisadmin
+    environment:
+      - ADMIN_USER=root
+      - ADMIN_PASS=root
+      - REDIS_1_HOST=redis
+      - REDIS_1_PORT=6379
     ports:
-      - '16379:6379'
+      - '999:80'
+    depends_on:
+      - redis
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge

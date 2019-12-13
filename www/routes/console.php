@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Redis;
 |
 */
 
-Artisan::command('inspire', function () {
+Artisan::command('tt', function () {
     Redis::set('name', 'Taylor');
 
     dump(Redis::get('name'));

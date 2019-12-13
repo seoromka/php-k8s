@@ -32,9 +32,9 @@ dev-app-bash:
 
 .PHONY: dev-up
 dev-up: export COMPOSE_FILE = docker-compose.dev.yml
-dev-up: dev-down dev-init
+dev-up: dev-down #dev-init
 	docker-compose up --build --force-recreate -d
-	docker-compose up -d
+	#docker-compose up -d
 	docker-compose logs -f
 
 .PHONY: dev-down
